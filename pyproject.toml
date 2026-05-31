@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eelmi"
+version = "0.1.0"
+description = "Библиотека для работы с тензорами для DL"
+authors = [
+    {name = "Александр", email = "tarasenko_nu@icloud.com"}
+]
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["tensor", "deep learning"]
+
+[project.urls]
+Homepage = "https://github.com/Yuko377/eelmi"
+Documentation = "https://eelmi.readthedocs.io"

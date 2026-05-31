@@ -6,11 +6,11 @@ class Tensor:
     def __init__(self, data):
         ''' Initial implementation for 2D tensors, numpy-based
         '''
-        self._shape = data.shape
-        self._data = data
+        self._data = np.array(data)
+        self._shape = self._data.shape
         self._grad = np.zeros(shape=self._shape)
         self._parents = set()
-        self._backward_func = None
+        self._backward_func = lambda: None
         
     def __add__(self, other):
         assert isinstance(other, Tensor)
@@ -20,9 +20,11 @@ class Tensor:
 
         def _addition_backward():
             self._grad += result._grad
+            print(self)
             other._grad += result._grad
+            print(other)
 
-        self._backward_func = _addition_backward
+        result._backward_func = _addition_backward
 
         return result
 
@@ -35,14 +37,35 @@ class Tensor:
 
         def _multiplication_backward():
             self._grad += np.matmul(result._grad, other._data.T)
+            print(self)
+
             other._grad += np.matmul(self._data.T, result._grad)
-        
-        self._backward_func = _multiplication_backward
+            print(other)
+
+        result._backward_func = _multiplication_backward
 
         return result
+    
+    def mean(self, dim=None):
+        assert isinstance(dim, int) or dim is None
+        assert
 
     def __pow__(self, other):
         pass
 
     def backward(self):
         self._grad = np.ones(shape=self._shape)
+        visited = set()
+
+        def _bckwrd(v):
+            if v not in visited:
+                visited.add(v)
+                v._backward_func()
+                for w in v._parents:
+                    _bckwrd(w)
+
+        _bckwrd(self)
+
+    def __repr__(self):
+        return f"eelmiTensor, data={self._data}, grad={self._grad}"
+
